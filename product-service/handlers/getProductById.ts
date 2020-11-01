@@ -4,6 +4,9 @@ import ProductService from '../services/product.service';
 export const getProductById: APIGatewayProxyHandler = async (event, _context) => {
   const response = {
     statusCode: 200,
+    headers: {
+        'Access-Control-Allow-Origin': '*'
+    },
     body: ''
   };
 
