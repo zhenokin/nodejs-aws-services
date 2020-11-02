@@ -11,7 +11,7 @@ export const getProductById: APIGatewayProxyHandler = async (event, _context) =>
   };
 
   try {
-    const { id } = event.queryStringParameters;
+    const { id } = event.pathParameters;
     const product = await ProductService.getProductById(id);
     response.body = JSON.stringify(product, null, 2);
   } catch (error) {

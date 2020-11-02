@@ -11,7 +11,9 @@ interface Product {
 class ProduceService {
     getProductsList(): Promise<Array<Product>> {
         return new Promise((res, rej) => {
-            products && products.length ? res(products) : rej('There are no products');
+            products && products.length
+            ? res(products)
+            : rej({ message: 'There are no products' });
         });
     }
 
@@ -21,7 +23,7 @@ class ProduceService {
                 const product = products.find((el) => el.id === id);
                 product && res(product);
             }
-            rej(`There is no product by id: ${id}`);
+            rej({ message: `There is no product by id: ${id}` });
         });
     }
 }
