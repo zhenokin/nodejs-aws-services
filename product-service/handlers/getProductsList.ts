@@ -10,11 +10,13 @@ export const getProductsList: APIGatewayProxyHandler = async (event, _context) =
     body: ''
   };
 
+  console.log('getProductsList lambda event:', JSON.stringify(event));
+
   try {
     const products = await ProductService.getProductsList();
     response.body = JSON.stringify(products, null, 2);
   } catch (error) {
-    response.statusCode = 204;
+    response.statusCode = 500;
     response.body = JSON.stringify(error, null, 2);
   }
   return response;
