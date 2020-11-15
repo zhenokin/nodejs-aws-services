@@ -1,30 +1,24 @@
-import products from '../db/productList.json';
-
-interface Product {
-    description: string;
-    id: string;
-    price: number;
-    title: string;
-    img: string;
-}
+import { newProductRequest, Product } from "../interfaces/product";
+import { createProduct, getAllProducts, getProductById } from "../models";
+import { HttpErrorService } from "./error.service";
 
 class ProduceService {
-    getProductsList(): Promise<Array<Product>> {
-        return new Promise((res, rej) => {
-            products && products.length
-            ? res(products)
-            : rej({ message: 'There are no products' });
-        });
+    async getProductsList(): Promise<Product[]> {
+        return await getAllProducts();
     }
 
-    getProductById(id: string) {
-        return new Promise((res, rej) => {
-            if (products && products.length) {
-                const product = products.find((el) => el.id === id);
-                product && res(product);
-            }
-            rej({ message: `There is no product by id: ${id}` });
-        });
+    async getProductById(id: string): Promise<Product | undefined> {
+        if (!id) {
+            throw new HttpErrorService('Missing required parameter - id', 400);
+        }
+        return await getProductById(id);
+    }
+
+    async addNewProduct(newProduct: newProductRequest): Promise<void> {
+        if (!newProduct.title || !newProduct.price) {
+            throw new HttpErrorService('Missing required parameter/s - title or price', 400);
+        }
+        await createProduct(newProduct);
     }
 }
 

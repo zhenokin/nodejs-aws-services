@@ -23,10 +23,7 @@ const serverlessConfiguration: Serverless = {
     stage: 'dev',
     apiGateway: {
       minimumCompressionSize: 1024,
-    },
-    environment: {
-      AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-    },
+    }
   },
   functions: {
     getProductsList: {
@@ -43,8 +40,7 @@ const serverlessConfiguration: Serverless = {
     },
     getProductById: {
       handler: 'handler.getProductById',
-      events: [
-        {
+      events: [{
           http: {
             method: 'get',
             path: '/products/{id}',
@@ -57,8 +53,17 @@ const serverlessConfiguration: Serverless = {
               }
             }
           }
+        }]
+    },
+    addNewProduct: {
+      handler: 'handler.addNewProduct',
+      events: [{
+        http: {
+          path: '/products',
+          method: 'post',
+          cors: true
         }
-      ]
+      }]
     }
   }
 }
