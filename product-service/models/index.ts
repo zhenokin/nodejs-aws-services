@@ -49,7 +49,7 @@ const getProductById = async (id: string): Promise<any | undefined> => {
 
 const createProduct = async (newProduct: any): Promise<void> => {
     const { title, description, price, img, count } = newProduct;
-    console.log('[createProduct]:',JSON.stringify(newProduct));
+    console.log('[createProduct]:', JSON.stringify(newProduct));
 
     const client = new Client(dbOptions);
 

@@ -4,7 +4,9 @@ import csv from 'csv-parser';
 
 export const importFileParser = (event, _context) => {
     const s3 = new AWS.S3({ region: REGION });
-    console.log('RECORDS', event.Records);
+    const sqs = new AWS.SQS({ region: REGION });
+
+    console.log('[importFileParser]: records:', event.Records);
 
     event.Records.forEach(record => {
         const s3Stream = s3.getObject({
@@ -14,7 +16,17 @@ export const importFileParser = (event, _context) => {
 
         s3Stream.pipe(csv())
             .on('data', data => {
-                console.log('[importFileParser]: data:', data);
+                console.log('[importFileParser]: data:', data); 
+                sqs.sendMessage({
+                    QueueUrl: process.env.SQS_URL,
+                    MessageBody: JSON.stringify(data)
+                }, err => {
+                    if (err) {
+                        console.log('[importFileParser]: SQS error:', err);
+                        return;
+                    }
+                    console.log('[importFileParser]: send message to SQS');
+                });
             })
             .on('error', (err) => {
                 console.error(err);
